@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Windows Internals for Defense | cmd.exe</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Windows Internals for Defense</h1>
+    <p>Baseline • LOLBins • Threat Hunting</p>
+</header>
+
+<nav>
+    <a href="#overview">Overview</a>
+    <a href="#baseline">Baseline</a>
+    <a href="#attack">Attack Usage</a>
+    <a href="#hunting">Hunting</a>
+    <a href="#references">References</a>
+</nav>
+
+<section id="overview">
+
+<h2>cmd.exe</h2>
+
+<div class="card">
+
+<p>
+The Windows Command Processor (cmd.exe) is one of the most common
+administrative tools in Microsoft Windows environments.
+</p>
+
+<ul>
+<li>Location: C:\Windows\System32\cmd.exe</li>
+<li>Type: Command Interpreter</li>
+<li>ATT&CK: T1059.003</li>
+<li>Category: Execution</li>
+</ul>
+
+</div>
+
+</section>
+
+<section id="baseline">
+
+<h2>Expected Baseline</h2>
+
+<div class="card">
+
+<h3>Common Parent Processes</h3>
+
+<ul>
+<li>explorer.exe</li>
+<li>powershell.exe</li>
+<li>taskeng.exe</li>
+<li>services.exe</li>
+</ul>
+
+</div>
+
+<div class="card success">
+
+<h3>Expected Activity</h3>
+
+<ul>
+<li>Administrative commands</li>
+<li>Batch scripts</li>
+<li>System diagnostics</li>
+<li>Automation tasks</li>
+</ul>
+
+</div>
+
+<div class="card warning">
+
+<h3>Requires Investigation</h3>
+
+<ul>
+<li>WINWORD.exe → cmd.exe</li>
+<li>OUTLOOK.exe → cmd.exe</li>
+<li>Acrobat.exe → cmd.exe</li>
+<li>Browser → cmd.exe</li>
+</ul>
+
+</div>
+
+</section>
+
+<section id="attack">
+
+<h2>Common Adversary Usage</h2>
+
+<div class="attack-box">
+
+<h3>Reconnaissance</h3>
+
+<pre>
+whoami
+hostname
+net user
+ipconfig /all
+</pre>
+
+</div>
+
+<div class="attack-box">
+
+<h3>Network Discovery</h3>
+
+<pre>
+arp -a
+net view
+netstat -ano
+</pre>
+
+</div>
+
+<div class="attack-box">
+
+<h3>Execution Chain</h3>
+
+<pre>
+cmd.exe /c powershell.exe
+</pre>
+
+</div>
+
+</section>
+
+<section id="hunting">
+
+<h2>Threat Hunting</h2>
+
+<div class="card">
+
+<h3>Questions</h3>
+
+<ul>
+<li>Who launched cmd.exe?</li>
+<li>Which parent process spawned it?</li>
+<li>Were child processes created?</li>
+<li>Was there network activity?</li>
+<li>Was PowerShell launched?</li>
+</ul>
+
+</div>
+
+<div class="card">
+
+<h3>Suspicious Process Tree</h3>
+
+<pre>
+WINWORD.EXE
+    |
+    +-- cmd.exe
+            |
+            +-- powershell.exe
+</pre>
+
+</div>
+
+</section>
+
+<section id="references">
+
+<h2>References</h2>
+
+<ul>
+<li>MITRE ATT&CK</li>
+<li>Microsoft Learn</li>
+<li>Sysinternals</li>
+<li>LOLBAS Project</li>
+</ul>
+
+</section>
+
+<footer>
+
+<p>
+Windows Internals for Defense © Priscila Rosado
+</p>
+
+</footer>
+
+</body>
+</html>
